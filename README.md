@@ -28,6 +28,11 @@ const state = {
 };
 
 const transformed = walk(program as Node, state, {
+  _(node, { state }) {
+    // the `_` visitor is 'universal' — if provided,
+    // it will run for every node, before deferring
+    // to specialised visitors
+  },
   VariableDeclarator(node, { state }) {
     // `state` is passed into each visitor
     if (node.id.type === 'Identifier') {
