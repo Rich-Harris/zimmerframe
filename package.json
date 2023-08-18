@@ -16,5 +16,6 @@
 	},
 	"scripts": {
 		"prepublishOnly": "dts-buddy"
-	}
+	},
+	"license": "MIT"
 }
