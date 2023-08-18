@@ -1,0 +1,17 @@
+{
+	"version": 3,
+	"file": "index.d.ts",
+	"names": [
+		"walk",
+		"Visitors"
+	],
+	"sources": [
+		"../src/index.js",
+		"../src/types.d.ts"
+	],
+	"sourcesContent": [
+		null,
+		null
+	],
+	"mappings": ";;;;;iBAOgBA,IAAIA;;;;;;;;;;MCERC,QAAQA"
+}

@@ -1,0 +1,20 @@
+{
+	"name": "zimmerframe",
+	"description": "A tool for walking ASTs",
+	"version": "0.0.1",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./types/index.d.ts",
+			"import": "./src/index.js"
+		}
+	},
+	"types": "./types/index.d.ts",
+	"devDependencies": {
+		"dts-buddy": "^0.1.12",
+		"vitest": "^0.34.2"
+	},
+	"scripts": {
+		"prepublishOnly": "dts-buddy"
+	}
+}
