@@ -15,7 +15,9 @@
 		"vitest": "^0.34.2"
 	},
 	"scripts": {
-		"prepublishOnly": "dts-buddy"
+		"prepublishOnly": "dts-buddy",
+		"test": "vitest --run",
+		"test:watch": "vitest"
 	},
 	"license": "MIT"
 }
