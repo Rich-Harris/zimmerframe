@@ -16,8 +16,8 @@ let message = 'hello';
 console.log(message);
 
 if (true) {
-	let answer = 42;
-	console.log(answer);
+  let answer = 42;
+  console.log(answer);
 }
 `);
 
