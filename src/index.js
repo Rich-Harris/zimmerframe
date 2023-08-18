@@ -10,6 +10,9 @@ export function walk(node, state, visitors) {
 
 	let stopped = false;
 
+	/** @type {string} */
+	let foo = 1;
+
 	/**
 	 * @param {T} _
 	 * @param {import('./types.js').Context<T, U>} context

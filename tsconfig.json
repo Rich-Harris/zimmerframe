@@ -5,7 +5,9 @@
 		"module": "esnext",
 		"target": "esnext",
 		"moduleResolution": "bundler",
-		"strict": true
+		"noEmit": true,
+		"strict": true,
+		"skipLibCheck": true
 	},
 	"include": ["./src", "./test", "./vitest.config.js"]
 }
