@@ -10,15 +10,9 @@ export function walk(node, state, visitors) {
 
 	let stopped = false;
 
-	/** @type {string} */
-	let foo = 1;
-
-	/**
-	 * @param {T} _
-	 * @param {import('./types.js').Context<T, U>} context
-	 */
-	function default_visitor(_, context) {
-		context.next(context.state);
+	/** @type {import('./types').Visitor<T, U>} _ */
+	function default_visitor(_, { next, state }) {
+		next(state);
 	}
 
 	/**
@@ -42,6 +36,10 @@ export function walk(node, state, visitors) {
 			path,
 			state,
 			next: (state) => {
+				if (visited_next) {
+					throw new Error(`Can only call next() once per node`);
+				}
+
 				visited_next = true;
 
 				path.push(node);
@@ -87,23 +85,39 @@ export function walk(node, state, visitors) {
 				stopped = skipped = true;
 			},
 			transform: (node, new_state = state) => {
-				visited_next = true;
 				return visit(node, path, new_state) ?? node;
 			}
 		};
 
+		let visitor = visitors[node.type] ?? default_visitor;
+
+		/** @type {T | void} */
+		let result;
+
 		if (universal) {
-			const result = universal(node, context);
+			let visited_next = false;
 
-			if (skipped || result) {
-				return result ?? node;
+			result = universal(node, {
+				...context,
+				next: (state) => {
+					visited_next = true;
+
+					// @ts-expect-error
+					visitor(node, {
+						...context,
+						state
+					});
+				}
+			});
+
+			if (!visited_next && !result) {
+				// @ts-expect-error
+				result = visitor(node, context);
 			}
+		} else {
+			// @ts-expect-error
+			result = visitor(node, context);
 		}
-
-		// @ts-ignore
-		const visitor = visitors[node.type] ?? default_visitor;
-
-		let result = visitor(node, context);
 
 		if (!visited_next && !skipped) {
 			context.next(state);
@@ -113,7 +127,9 @@ export function walk(node, state, visitors) {
 			result = { ...node, ...mutations };
 		}
 
-		return result;
+		if (result) {
+			return result;
+		}
 	}
 
 	return visit(node, [], state) ?? node;

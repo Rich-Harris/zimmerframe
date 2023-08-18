@@ -3,8 +3,12 @@ type BaseNode = { type: string };
 type NodeOf<Type extends string, X> = X extends { type: Type } ? X : never;
 
 type MappedVisitors<T extends BaseNode, U, Key extends T['type']> = {
-	[K in Key]?: (node: NodeOf<K, T>, context: Context<T, U>) => void;
+	[K in Key]?: Visitor<NodeOf<K, T>, U>;
 };
+
+export interface Visitor<T extends BaseNode, U> {
+	(node: T, context: Context<T, U>): T | void;
+}
 
 export type Visitors<
 	T extends BaseNode,
@@ -13,7 +17,7 @@ export type Visitors<
 > = Key extends '_'
 	? never
 	: MappedVisitors<T, U, Key> & {
-			_?: (node: T, context: Context<T, U>) => void;
+			_?: Visitor<T, U>;
 	  };
 
 // export type Visitors<
