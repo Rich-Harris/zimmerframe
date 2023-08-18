@@ -1,7 +1,7 @@
 {
 	"name": "zimmerframe",
 	"description": "A tool for walking ASTs",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"type": "module",
 	"exports": {
 		".": {
@@ -10,6 +10,10 @@
 		}
 	},
 	"types": "./types/index.d.ts",
+	"files": [
+		"src",
+		"types"
+	],
 	"devDependencies": {
 		"dts-buddy": "^0.1.12",
 		"typescript": "^5.1.6",
