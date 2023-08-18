@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.0.4
+
+- Make visitor signature more forgiving
+
 ## 0.0.3
 
 - Allow state to be `null`
