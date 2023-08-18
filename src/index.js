@@ -1,6 +1,6 @@
 /**
  * @template {{type: string}} T
- * @template {Record<string, any>} U
+ * @template {Record<string, any> | null} U
  * @param {T} node
  * @param {U} state
  * @param {import('./types').Visitors<T, U>} visitors

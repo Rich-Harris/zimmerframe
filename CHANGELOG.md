@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.0.3
+
+- Allow state to be `null`
+
 ## 0.0.2
 
 - Add `pkg.files`
