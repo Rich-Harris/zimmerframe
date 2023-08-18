@@ -6,6 +6,8 @@
  * @param {import('./types').Visitors<T, U>} visitors
  */
 export function walk(node, state, visitors) {
+	const universal = visitors._;
+
 	let stopped = false;
 
 	/**
@@ -20,13 +22,17 @@ export function walk(node, state, visitors) {
 	 * @param {T} node
 	 * @param {T[]} path
 	 * @param {U} state
+	 * @returns {T | undefined}
 	 */
 	function visit(node, path, state) {
-		if (stopped) return;
-		if (!node.type) return;
+		if (stopped) return node;
+		if (!node.type) return node;
 
 		let visited_next = false;
 		let skipped = false;
+
+		/** @type {Record<string, any>} */
+		const mutations = {};
 
 		/** @type {import('./types').Context<T, U>} */
 		const context = {
@@ -39,16 +45,33 @@ export function walk(node, state, visitors) {
 				for (const key in node) {
 					if (key === 'type') continue;
 
-					const child = node[key];
-					if (child && typeof child === 'object') {
-						if (Array.isArray(child)) {
-							child.forEach((node) => {
+					const child_node = node[key];
+					if (child_node && typeof child_node === 'object') {
+						if (Array.isArray(child_node)) {
+							/** @type {Record<number, T>} */
+							const array_mutations = {};
+
+							child_node.forEach((node, i) => {
 								if (node && typeof node === 'object') {
-									visit(node, path, state);
+									const result = visit(node, path, state);
+									if (result) array_mutations[i] = result;
 								}
 							});
+
+							if (Object.keys(array_mutations).length > 0) {
+								mutations[key] = child_node.map(
+									(node, i) => array_mutations[i] ?? node
+								);
+								skipped = true;
+							}
 						} else {
-							visit(/** @type {T} */ (child), path, state);
+							const result = visit(/** @type {T} */ (child_node), path, state);
+
+							// @ts-ignore
+							if (result) {
+								mutations[key] = result;
+								skipped = true;
+							}
 						}
 					}
 				}
@@ -58,19 +81,37 @@ export function walk(node, state, visitors) {
 				skipped = true;
 			},
 			stop: () => {
-				stopped = true;
+				stopped = skipped = true;
+			},
+			transform: (node, new_state = state) => {
+				visited_next = true;
+				return visit(node, path, new_state) ?? node;
 			}
 		};
 
-		const visitor = visitors[node.type] ?? default_visitor;
+		if (universal) {
+			const result = universal(node, context);
+
+			if (skipped || result) {
+				return result ?? node;
+			}
+		}
 
 		// @ts-ignore
-		visitor(node, context);
+		const visitor = visitors[node.type] ?? default_visitor;
+
+		let result = visitor(node, context);
 
 		if (!visited_next && !skipped) {
 			context.next(state);
 		}
+
+		if (!result && Object.keys(mutations).length > 0) {
+			result = { ...node, ...mutations };
+		}
+
+		return result;
 	}
 
-	return visit(node, [], state);
+	return visit(node, [], state) ?? node;
 }

@@ -2,11 +2,7 @@ import { expect, test } from 'vitest';
 import { walk } from '../src/index.js';
 
 test('traverses a tree', () => {
-	/**
-	 * @typedef {{ type: 'Root' | 'A' | 'B' | 'Potato'; [key: string]: any }} Node
-	 */
-
-	/** @type {Node} */
+	/** @type {import('./types').Node<'Root' | 'A' | 'B' | 'C'>} */
 	const tree = {
 		type: 'Root',
 		children: [{ type: 'A' }, { type: 'B' }, { type: 'C' }]
@@ -14,27 +10,30 @@ test('traverses a tree', () => {
 
 	const state = {
 		/** @type {string[]} */
-		visited: []
+		visited: [],
+		depth: 0
 	};
 
 	walk(tree, state, {
-		Root: (node, { state }) => {
+		Root: (node, { state, next }) => {
 			expect(node.type).toBe('Root');
-			state.visited.push('root');
+			state.visited.push(state.depth + 'root');
+
+			next({ ...state, depth: state.depth + 1 });
 		},
 		A: (node, { state }) => {
 			expect(node.type).toBe('A');
-			state.visited.push('a');
+			state.visited.push(state.depth + 'a');
 		},
 		B: (node, { state }) => {
 			expect(node.type).toBe('B');
-			state.visited.push('b');
+			state.visited.push(state.depth + 'b');
 		},
 		C: (node, { state }) => {
 			expect(node.type).toBe('C');
-			state.visited.push('c');
+			state.visited.push(state.depth + 'c');
 		}
 	});
 
-	expect(state.visited).toEqual(['root', 'a', 'b', 'c']);
+	expect(state.visited).toEqual(['0root', '1a', '1b', '1c']);
 });
