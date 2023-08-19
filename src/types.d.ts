@@ -13,7 +13,7 @@ export type Visitors<T extends BaseNode, U> = T['type'] extends '_'
 	: SpecialisedVisitors<T, U> & { _?: Visitor<T, U, T> };
 
 export interface Context<T, U, V> {
-	path: T[];
+	path: V[];
 	state: U;
 	next: (state: U) => void;
 	skip: () => void;
