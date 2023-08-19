@@ -15,12 +15,12 @@
 		"types"
 	],
 	"devDependencies": {
-		"dts-buddy": "^0.1.12",
+		"dts-buddy": "^0.1.13",
 		"typescript": "^5.1.6",
 		"vitest": "^0.34.2"
 	},
 	"scripts": {
-		"prepublishOnly": "dts-buddy",
+		"prepublishOnly": "dts-buddy -m zimmerframe:src/public.d.ts",
 		"check": "tsc",
 		"test": "vitest --run",
 		"test:watch": "vitest"

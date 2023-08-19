@@ -6,8 +6,8 @@ settings:
 
 devDependencies:
   dts-buddy:
-    specifier: ^0.1.12
-    version: 0.1.12
+    specifier: ^0.1.13
+    version: 0.1.13
   typescript:
     specifier: ^5.1.6
     version: 5.1.6
@@ -381,8 +381,8 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dev: true
 
-  /dts-buddy@0.1.12:
-    resolution: {integrity: sha512-3HcUQnmG02fPSFL/Y1Ufh4oAGpaJ8cN4UP60Q1ll014LSwfS7XceMr7jBt9k55cT+dznZsQCxOx2tITgq/WHsw==}
+  /dts-buddy@0.1.13:
+    resolution: {integrity: sha512-5IZvzhiyKcnQ7UKeLAhHREF5lxKMBB2z0v+2UCLMa/cNlTRCbZB7CXpqmDyZu7cTwaky8IXuzGvvWLXeE+d83Q==}
     hasBin: true
     dependencies:
       '@jridgewell/source-map': 0.3.5
