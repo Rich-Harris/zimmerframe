@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.0.7
+
+- Fix package.json
+
 ## 0.0.6
 
 - Export types

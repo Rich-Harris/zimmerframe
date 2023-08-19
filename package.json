@@ -1,12 +1,12 @@
 {
 	"name": "zimmerframe",
 	"description": "A tool for walking ASTs",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"type": "module",
 	"exports": {
 		".": {
 			"types": "./types/index.d.ts",
-			"import": "./src/index.js"
+			"import": "./src/walk.js"
 		}
 	},
 	"types": "./types/index.d.ts",
