@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.0.6
+
+- Export types
+
 ## 0.0.5
 
 - Fix some type issues

@@ -102,7 +102,25 @@ walk(ast as estree.Node, state, {
 
 For this to work, the first argument should be casted to an union of all the types you plan to visit.
 
-> TODO this doesn't, errr, work right now
+You can import types from 'zimmerframe':
+
+```ts
+import {
+  walk,
+  type Visitor,
+  type Visitors,
+  type Context
+} from 'zimmerframe';
+import type { Node } from 'estree';
+
+interface State {...}
+
+const node: Node = {...};
+const state: State = {...};
+const visitors: Visitors<Node, State> =  {...}
+
+walk(node, state, visitors);
+```
 
 ## Context
 
