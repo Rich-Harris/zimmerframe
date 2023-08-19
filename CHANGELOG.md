@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.0.5
+
+- Fix some type issues
+
 ## 0.0.4
 
 - Make visitor signature more forgiving
