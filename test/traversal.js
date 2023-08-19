@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 import { walk } from '../src/index.js';
 
 test('traverses a tree', () => {
-	/** @type {import('./types').Node<'Root' | 'A' | 'B' | 'C'>} */
+	/** @type {import('./types').TestNode} */
 	const tree = {
 		type: 'Root',
 		children: [{ type: 'A' }, { type: 'B' }, { type: 'C' }]
@@ -14,7 +14,7 @@ test('traverses a tree', () => {
 		depth: 0
 	};
 
-	walk(tree, state, {
+	walk(/** @type {import('./types').TestNode} */ (tree), state, {
 		Root: (node, { state, next }) => {
 			expect(node.type).toBe('Root');
 			state.visited.push(state.depth + 'root');
@@ -39,7 +39,7 @@ test('traverses a tree', () => {
 });
 
 test('visits all nodes with _', () => {
-	/** @type {import('./types').Node<'Root' | 'A' | 'B' | 'C'>} */
+	/** @type {import('./types').TestNode} */
 	const tree = {
 		type: 'Root',
 		children: [{ type: 'A' }, { type: 'B' }, { type: 'C' }]
@@ -55,7 +55,7 @@ test('visits all nodes with _', () => {
 	/** @type {string[]} */
 	const log = [];
 
-	walk(tree, state, {
+	walk(/** @type {import('./types').TestNode} */ (tree), state, {
 		_: (node, { state, next }) => {
 			log.push(`${state.depth} ${state.id} enter ${node.type}`);
 			next({ ...state, id: ++uid });

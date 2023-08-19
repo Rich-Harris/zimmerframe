@@ -10,7 +10,7 @@ export function walk(node, state, visitors) {
 
 	let stopped = false;
 
-	/** @type {import('./types').Visitor<T, U>} _ */
+	/** @type {import('./types').Visitor<T, U, T>} _ */
 	function default_visitor(_, { next, state }) {
 		next(state);
 	}
@@ -31,7 +31,7 @@ export function walk(node, state, visitors) {
 		/** @type {Record<string, any>} */
 		const mutations = {};
 
-		/** @type {import('./types').Context<T, U>} */
+		/** @type {import('./types').Context<T, U, T>} */
 		const context = {
 			path,
 			state,
@@ -99,10 +99,10 @@ export function walk(node, state, visitors) {
 
 			result = universal(node, {
 				...context,
+				/** @param {U} state */
 				next: (state) => {
 					visited_next = true;
 
-					// @ts-expect-error
 					visitor(node, {
 						...context,
 						state
@@ -111,11 +111,9 @@ export function walk(node, state, visitors) {
 			});
 
 			if (!visited_next && !result) {
-				// @ts-expect-error
 				result = visitor(node, context);
 			}
 		} else {
-			// @ts-expect-error
 			result = visitor(node, context);
 		}
 
