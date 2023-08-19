@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.0.8
+
+- Fix `path` type
+
 ## 0.0.7
 
 - Fix package.json
