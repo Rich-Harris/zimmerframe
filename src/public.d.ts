@@ -2,7 +2,7 @@ import { BaseNode, NodeOf } from './private';
 
 export type Visitor<T, U, V> = (node: T, context: Context<T, U, V>) => V | void;
 
-export type SpecialisedVisitors<T extends BaseNode, U> = {
+type SpecialisedVisitors<T extends BaseNode, U> = {
 	[K in T['type']]?: Visitor<NodeOf<K, T>, U, T>;
 };
 
