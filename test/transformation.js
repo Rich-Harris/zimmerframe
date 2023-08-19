@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 import { walk } from '../src/index.js';
 
 test('transforms a tree', () => {
-	/** @type {import('./types').Node<'Root' | 'A' | 'B' | 'C'>} */
+	/** @type {import('./types').TestNode} */
 	const tree = {
 		type: 'Root',
 		children: [{ type: 'A' }, { type: 'B' }, { type: 'C' }]
@@ -10,24 +10,26 @@ test('transforms a tree', () => {
 
 	const state = {};
 
-	const transformed = walk(tree, state, {
-		Root: (node, { transform }) => {
-			return {
-				type: 'TransformedRoot',
-				elements: node.children.map((child) => transform(child))
-			};
-		},
-		A: (node) => {
-			return {
-				type: 'TransformedA'
-			};
-		},
-		C: (node) => {
-			return {
-				type: 'TransformedC'
-			};
-		}
-	});
+	const transformed = /** @type {import('./types').TransformedRoot} */ (
+		walk(/** @type {import('./types').TestNode} */ (tree), state, {
+			Root: (node, { transform }) => {
+				return {
+					type: 'TransformedRoot',
+					elements: node.children.map((child) => transform(child))
+				};
+			},
+			A: (node) => {
+				return {
+					type: 'TransformedA'
+				};
+			},
+			C: (node) => {
+				return {
+					type: 'TransformedC'
+				};
+			}
+		})
+	);
 
 	// check that `tree` wasn't mutated
 	expect(tree).toEqual({

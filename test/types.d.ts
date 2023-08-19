@@ -1,4 +1,43 @@
-export interface Node<Type extends string> {
-	type: Type;
-	[key: string]: any;
+export interface Root {
+	type: 'Root';
+	children: TestNode[];
 }
+
+export interface A {
+	type: 'A';
+}
+
+export interface B {
+	type: 'B';
+}
+
+export interface C {
+	type: 'C';
+}
+
+export interface TransformedRoot {
+	type: 'TransformedRoot';
+	elements: TestNode[];
+}
+
+export interface TransformedA {
+	type: 'TransformedA';
+}
+
+export interface TransformedB {
+	type: 'TransformedB';
+}
+
+export interface TransformedC {
+	type: 'TransformedC';
+}
+
+export type TestNode =
+	| Root
+	| A
+	| B
+	| C
+	| TransformedRoot
+	| TransformedA
+	| TransformedB
+	| TransformedC;
