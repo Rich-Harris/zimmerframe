@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { walk } from '../src/index.js';
+import { walk } from '../src/walk.js';
 
 test('traverses a tree', () => {
 	/** @type {import('./types').TestNode} */
