@@ -1,10 +1,12 @@
-import { BaseNode, NodeOf } from './private';
+type BaseNode = { type: string };
 
-export type Visitor<T, U, V> = (node: T, context: Context<T, U, V>) => V | void;
+type NodeOf<T extends string, X> = X extends { type: T } ? X : never;
 
 type SpecialisedVisitors<T extends BaseNode, U> = {
 	[K in T['type']]?: Visitor<NodeOf<K, T>, U, T>;
 };
+
+export type Visitor<T, U, V> = (node: T, context: Context<T, U, V>) => V | void;
 
 export type Visitors<T extends BaseNode, U> = T['type'] extends '_'
 	? never
@@ -16,7 +18,5 @@ export interface Context<T, U, V> {
 	next: (state: U) => void;
 	skip: () => void;
 	stop: () => void;
-	transform: (node: T, state?: U) => V;
+	transform: (node: V, state?: U) => V;
 }
-
-export * from './index.js';

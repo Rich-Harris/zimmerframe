@@ -89,10 +89,9 @@ export function walk(node, state, visitors) {
 			}
 		};
 
-		let visitor =
-			/** @type {import('./types').Visitor<T, U, T>} _ */ (
-				visitors[/** @type {T['type']} */ (node.type)]
-			) ?? default_visitor;
+		let visitor = /** @type {import('./types').Visitor<T, U, T>} */ (
+			visitors[/** @type {T['type']} */ (node.type)] ?? default_visitor
+		);
 
 		/** @type {T | void} */
 		let result;

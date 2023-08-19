@@ -20,7 +20,7 @@
 		"vitest": "^0.34.2"
 	},
 	"scripts": {
-		"prepublishOnly": "dts-buddy -m zimmerframe:src/public.d.ts",
+		"prepublishOnly": "dts-buddy -m zimmerframe:src/index.d.ts",
 		"check": "tsc",
 		"test": "vitest --run",
 		"test:watch": "vitest"
