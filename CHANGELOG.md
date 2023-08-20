@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.0.10
+
+- Simplify `Context` type arguments
+
 ## 0.0.9
 
 - Skip children when transforming
