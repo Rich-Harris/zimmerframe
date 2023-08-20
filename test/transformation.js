@@ -8,10 +8,10 @@ test('transforms a tree', () => {
 		children: [{ type: 'A' }, { type: 'B' }, { type: 'C' }]
 	};
 
-	const state = {};
+	let count = 0;
 
 	const transformed = /** @type {import('./types').TransformedRoot} */ (
-		walk(/** @type {import('./types').TestNode} */ (tree), state, {
+		walk(/** @type {import('./types').TestNode} */ (tree), null, {
 			Root: (node, { transform }) => {
 				return {
 					type: 'TransformedRoot',
@@ -19,17 +19,21 @@ test('transforms a tree', () => {
 				};
 			},
 			A: (node) => {
+				count += 1;
 				return {
 					type: 'TransformedA'
 				};
 			},
 			C: (node) => {
+				count += 1;
 				return {
 					type: 'TransformedC'
 				};
 			}
 		})
 	);
+
+	expect(count).toBe(2);
 
 	// check that `tree` wasn't mutated
 	expect(tree).toEqual({
