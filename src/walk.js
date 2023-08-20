@@ -31,7 +31,7 @@ export function walk(node, state, visitors) {
 		/** @type {Record<string, any>} */
 		const mutations = {};
 
-		/** @type {import('./types').Context<T, U, T>} */
+		/** @type {import('./types').Context<T, U>} */
 		const context = {
 			path,
 			state,
