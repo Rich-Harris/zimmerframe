@@ -119,12 +119,14 @@ export function walk(node, state, visitors) {
 			result = visitor(node, context);
 		}
 
-		if (!visited_next && !skipped) {
-			context.next(state);
-		}
+		if (!result) {
+			if (!visited_next && !skipped) {
+				context.next(state);
+			}
 
-		if (!result && Object.keys(mutations).length > 0) {
-			result = { ...node, ...mutations };
+			if (Object.keys(mutations).length > 0) {
+				result = { ...node, ...mutations };
+			}
 		}
 
 		if (result) {
