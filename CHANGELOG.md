@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.0.9
+
+- Skip children when transforming
+
 ## 0.0.8
 
 - Fix `path` type
