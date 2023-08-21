@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.0.11
+
+- Respect individual visitor transformations if universal visitors calls `next(...)`
+
 ## 0.0.10
 
 - Simplify `Context` type arguments
