@@ -53,3 +53,31 @@ test('transforms a tree', () => {
 	// expect the `B` node to have been preserved
 	expect(transformed.elements[1]).toBe(tree.children[1]);
 });
+
+test('respects individual visitors if universal visitor calls next()', () => {
+	/** @type {import('./types').TestNode} */
+	const tree = {
+		type: 'Root',
+		children: [{ type: 'A' }, { type: 'B' }, { type: 'C' }]
+	};
+
+	const transformed = walk(
+		/** @type {import('./types').TestNode} */ (tree),
+		null,
+		{
+			_(node, { state, next }) {
+				next(state);
+			},
+			A(node) {
+				return {
+					type: 'TransformedA'
+				};
+			}
+		}
+	);
+
+	expect(transformed).toEqual({
+		type: 'Root',
+		children: [{ type: 'TransformedA' }, { type: 'B' }, { type: 'C' }]
+	});
+});

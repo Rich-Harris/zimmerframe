@@ -99,18 +99,26 @@ export function walk(node, state, visitors) {
 		if (universal) {
 			let visited_next = false;
 
+			/** @type {T | void} */
+			let inner_result;
+
 			result = universal(node, {
 				...context,
 				/** @param {U} state */
 				next: (state) => {
 					visited_next = true;
 
-					visitor(node, {
+					inner_result = visitor(node, {
 						...context,
 						state
 					});
 				}
 			});
+
+			// @ts-expect-error TypeScript doesn't understand that `context.next(...)` is called immediately
+			if (!result && inner_result) {
+				result = inner_result;
+			}
 
 			if (!visited_next && !result) {
 				result = visitor(node, context);
