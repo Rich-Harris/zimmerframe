@@ -28,6 +28,10 @@ export function walk(node, state, visitors) {
 		let visited_next = false;
 		let skipped = false;
 
+		/** @type {T | void} */
+		let result;
+		let next_state = state;
+
 		/** @type {Record<string, any>} */
 		const mutations = {};
 
@@ -84,7 +88,7 @@ export function walk(node, state, visitors) {
 			stop: () => {
 				stopped = skipped = true;
 			},
-			visit: (node, new_state = state) => {
+			visit: (node, new_state = next_state) => {
 				visited_next = true;
 				return visit(node, path, new_state) ?? node;
 			}
@@ -93,9 +97,6 @@ export function walk(node, state, visitors) {
 		let visitor = /** @type {import('./types').Visitor<T, U, T>} */ (
 			visitors[/** @type {T['type']} */ (node.type)] ?? default_visitor
 		);
-
-		/** @type {T | void} */
-		let result;
 
 		if (universal) {
 			let visited_next = false;
@@ -108,6 +109,7 @@ export function walk(node, state, visitors) {
 				/** @param {U} state */
 				next: (state) => {
 					visited_next = true;
+					next_state = state;
 
 					inner_result = visitor(node, {
 						...context,
@@ -130,7 +132,7 @@ export function walk(node, state, visitors) {
 
 		if (!result) {
 			if (!visited_next && !skipped) {
-				context.next(state);
+				context.next(next_state);
 			}
 
 			if (Object.keys(mutations).length > 0) {
