@@ -91,3 +91,49 @@ test('visits all nodes with _', () => {
 		'0 1 leave Root'
 	]);
 });
+
+test('state is passed to children of specialized visitor when using universal visitor', () => {
+	/** @type {import('./types').TestNode} */
+	const tree = {
+		type: 'Root',
+		children: [{ type: 'A' }, { type: 'B' }, { type: 'C' }]
+	};
+
+	const state = {
+		universal: false
+	};
+
+	/** @type {string[]} */
+	const log = [];
+
+	walk(/** @type {import('./types').TestNode} */ (tree), state, {
+		_(node, { next }) {
+			if (node.type === 'Root') {
+				next({ universal: true });
+			}
+		},
+		Root(node, { state, visit }) {
+			log.push(`visited ${node.type} ${state.universal}`);
+
+			for (const child of node.children) {
+				visit(child);
+			}
+		},
+		A(node, { state, visit }) {
+			log.push(`visited ${node.type} ${state.universal}`);
+		},
+		B(node, { state, visit }) {
+			log.push(`visited ${node.type} ${state.universal}`);
+		},
+		C(node, { state, visit }) {
+			log.push(`visited ${node.type} ${state.universal}`);
+		}
+	});
+
+	expect(log).toEqual([
+		'visited Root true',
+		'visited A true',
+		'visited B true',
+		'visited C true'
+	]);
+});
