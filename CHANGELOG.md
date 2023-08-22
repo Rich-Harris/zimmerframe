@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.1.2
+
+- Forward state from universal visitors
+
 ## 0.1.1
 
 - Skip children after calling `visit`
