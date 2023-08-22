@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.1.0
+
+- Rename `context.transform` to `context.visit`
+
 ## 0.0.11
 
 - Respect individual visitor transformations if universal visitors calls `next(...)`
