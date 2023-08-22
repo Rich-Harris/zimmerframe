@@ -85,6 +85,7 @@ export function walk(node, state, visitors) {
 				stopped = skipped = true;
 			},
 			visit: (node, new_state = state) => {
+				visited_next = true;
 				return visit(node, path, new_state) ?? node;
 			}
 		};
