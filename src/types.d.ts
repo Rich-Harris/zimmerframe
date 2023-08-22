@@ -18,5 +18,5 @@ export interface Context<T, U> {
 	next: (state: U) => void;
 	skip: () => void;
 	stop: () => void;
-	transform: (node: T, state?: U) => T;
+	visit: (node: T, state?: U) => T;
 }
