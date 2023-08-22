@@ -12,10 +12,10 @@ test('transforms a tree', () => {
 
 	const transformed = /** @type {import('./types').TransformedRoot} */ (
 		walk(/** @type {import('./types').TestNode} */ (tree), null, {
-			Root: (node, { transform }) => {
+			Root: (node, { visit }) => {
 				return {
 					type: 'TransformedRoot',
-					elements: node.children.map((child) => transform(child))
+					elements: node.children.map((child) => visit(child))
 				};
 			},
 			A: (node) => {

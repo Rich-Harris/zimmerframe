@@ -84,7 +84,7 @@ export function walk(node, state, visitors) {
 			stop: () => {
 				stopped = skipped = true;
 			},
-			transform: (node, new_state = state) => {
+			visit: (node, new_state = state) => {
 				return visit(node, path, new_state) ?? node;
 			}
 		};
