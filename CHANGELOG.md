@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.1.1
+
+- Skip children after calling `visit`
+
 ## 0.1.0
 
 - Rename `context.transform` to `context.visit`
