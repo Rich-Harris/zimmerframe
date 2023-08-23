@@ -110,6 +110,8 @@ test('state is passed to children of specialized visitor when using universal vi
 		_(node, { next }) {
 			if (node.type === 'Root') {
 				next({ universal: true });
+			} else {
+				next();
 			}
 		},
 		Root(node, { state, visit }) {
