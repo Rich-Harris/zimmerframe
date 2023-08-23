@@ -77,8 +77,11 @@ export function walk(node, state, visitors) {
 			stop: () => {
 				stopped = true;
 			},
-			visit: (node, next_state = state) => {
-				return visit(node, path, next_state) ?? node;
+			visit: (next_node, next_state = state) => {
+				path.push(node);
+				const result = visit(next_node, path, next_state) ?? next_node;
+				path.pop();
+				return result;
 			}
 		};
 
