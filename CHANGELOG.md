@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.2.0
+
+- Require `next()` to be called to visit children
+
 ## 0.1.2
 
 - Forward state from universal visitors
