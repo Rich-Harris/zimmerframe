@@ -139,3 +139,109 @@ test('state is passed to children of specialized visitor when using universal vi
 		'visited C true'
 	]);
 });
+
+test('path is pushed and popped correctly using next', () => {
+	/** @type {import('./types').TestNode} */
+	const tree = {
+		type: 'Root',
+		children: [
+			{ type: 'Root', children: [{ type: 'A' }] },
+			{ type: 'B' },
+			{ type: 'C' }
+		]
+	};
+
+	/** @type {string[]} */
+	const log = [];
+
+	/**
+	 * @param {import('./types').TestNode} node
+	 * @param {import('./types').TestNode[]} path
+	 */
+	function log_path(node, path) {
+		log.push(`visited ${node.type} ${JSON.stringify(path.map((n) => n.type))}`);
+	}
+
+	walk(
+		/** @type {import('./types').TestNode} */ (tree),
+		{},
+		{
+			Root(node, { path, next }) {
+				log_path(node, path);
+				next();
+			},
+			A(node, { path }) {
+				log_path(node, path);
+			},
+			B(node, { path }) {
+				log_path(node, path);
+			},
+			C(node, { path }) {
+				log_path(node, path);
+			}
+		}
+	);
+
+	expect(log).toEqual([
+		'visited Root []',
+		'visited Root ["Root"]',
+		'visited A ["Root","Root"]',
+		'visited B ["Root"]',
+		'visited C ["Root"]'
+	]);
+});
+
+test('path is pushed and popped correctly using visit', () => {
+	/** @type {import('./types').TestNode} */
+	const tree = {
+		type: 'Root',
+		children: [
+			{ type: 'Root', children: [{ type: 'A' }] },
+			{ type: 'B' },
+			{ type: 'C' }
+		]
+	};
+
+	/** @type {string[]} */
+	const log = [];
+
+	/**
+	 * @param {import('./types').TestNode} node
+	 * @param {import('./types').TestNode[]} path
+	 */
+	function log_path(node, path) {
+		log.push(`visited ${node.type} ${JSON.stringify(path.map((n) => n.type))}`);
+	}
+
+	walk(
+		/** @type {import('./types').TestNode} */ (tree),
+		{},
+		{
+			Root(node, { path, visit }) {
+				log_path(node, path);
+
+				for (const child of node.children) {
+					if (child.type !== 'C') {
+						visit(child);
+					}
+				}
+			},
+			A(node, { path }) {
+				log_path(node, path);
+			},
+			B(node, { path }) {
+				log_path(node, path);
+			},
+			C(node, { path }) {
+				log_path(node, path);
+			}
+		}
+	);
+
+	expect(log).toEqual([
+		'visited Root []',
+		'visited Root ["Root"]',
+		'visited A ["Root","Root"]',
+		'visited B ["Root"]'
+	]);
+});

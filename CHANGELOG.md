@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 0.2.1
+
+- Push current node to path when calling `visit`
+
 ## 0.2.0
 
 - Require `next()` to be called to visit children
