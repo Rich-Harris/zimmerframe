@@ -25,12 +25,8 @@ export function walk(node, state, visitors) {
 		if (stopped) return node;
 		if (!node.type) return node;
 
-		let visited_next = false;
-		let skipped = false;
-
 		/** @type {T | void} */
 		let result;
-		let next_state = state;
 
 		/** @type {Record<string, any>} */
 		const mutations = {};
@@ -39,13 +35,7 @@ export function walk(node, state, visitors) {
 		const context = {
 			path,
 			state,
-			next: (state) => {
-				if (visited_next) {
-					throw new Error(`Can only call next() once per node`);
-				}
-
-				visited_next = true;
-
+			next: (next_state = state) => {
 				path.push(node);
 				for (const key in node) {
 					if (key === 'type') continue;
@@ -58,7 +48,7 @@ export function walk(node, state, visitors) {
 
 							child_node.forEach((node, i) => {
 								if (node && typeof node === 'object') {
-									const result = visit(node, path, state);
+									const result = visit(node, path, next_state);
 									if (result) array_mutations[i] = result;
 								}
 							});
@@ -67,30 +57,28 @@ export function walk(node, state, visitors) {
 								mutations[key] = child_node.map(
 									(node, i) => array_mutations[i] ?? node
 								);
-								skipped = true;
 							}
 						} else {
-							const result = visit(/** @type {T} */ (child_node), path, state);
+							const result = visit(
+								/** @type {T} */ (child_node),
+								path,
+								next_state
+							);
 
 							// @ts-ignore
 							if (result) {
 								mutations[key] = result;
-								skipped = true;
 							}
 						}
 					}
 				}
 				path.pop();
 			},
-			skip: () => {
-				skipped = true;
-			},
 			stop: () => {
-				stopped = skipped = true;
+				stopped = true;
 			},
-			visit: (node, new_state = next_state) => {
-				visited_next = true;
-				return visit(node, path, new_state) ?? node;
+			visit: (node, next_state = state) => {
+				return visit(node, path, next_state) ?? node;
 			}
 		};
 
@@ -99,21 +87,18 @@ export function walk(node, state, visitors) {
 		);
 
 		if (universal) {
-			let visited_next = false;
-
 			/** @type {T | void} */
 			let inner_result;
 
 			result = universal(node, {
 				...context,
-				/** @param {U} state */
-				next: (state) => {
-					visited_next = true;
-					next_state = state;
+				/** @param {U} next_state */
+				next: (next_state = state) => {
+					state = next_state; // make it the default for subsequent specialised visitors
 
 					inner_result = visitor(node, {
 						...context,
-						state
+						state: next_state
 					});
 				}
 			});
@@ -122,19 +107,11 @@ export function walk(node, state, visitors) {
 			if (!result && inner_result) {
 				result = inner_result;
 			}
-
-			if (!visited_next && !result) {
-				result = visitor(node, context);
-			}
 		} else {
 			result = visitor(node, context);
 		}
 
 		if (!result) {
-			if (!visited_next && !skipped) {
-				context.next(next_state);
-			}
-
 			if (Object.keys(mutations).length > 0) {
 				result = { ...node, ...mutations };
 			}

@@ -28,10 +28,12 @@ const state = {
 };
 
 const transformed = walk(program as Node, state, {
-  _(node, { state }) {
+  _(node, { state, next }) {
     // the `_` visitor is 'universal' — if provided,
     // it will run for every node, before deferring
-    // to specialised visitors
+    // to specialised visitors. you can pass a new
+    // `state` object to `next`
+    next({ ...state, answer: 42 });
   },
   VariableDeclarator(node, { state }) {
     // `state` is passed into each visitor
@@ -42,14 +44,9 @@ const transformed = walk(program as Node, state, {
       });
     }
   },
-  BlockStatement(node, { state, next, skip, stop }) {
-    // calling `this.next(...)` will replace state
-    // for any child nodes. you can also control
-    // when child nodes are visited. otherwise,
-    // child nodes will be visited afterwards,
-    // unless you call `skip()` (which skips
-    // children) or `stop()` (which stops
-    // all subsequent traversal)
+  BlockStatement(node, { state, next, stop }) {
+    // you must call `next()` or `next(childState)`
+    // to visit child nodes
     console.log('entering BlockStatement');
     next({ ...state, depth: state.depth + 1 });
     console.log('leaving BlockStatement');
@@ -126,10 +123,9 @@ walk(node, state, visitors);
 
 Each visitor receives a second argument, `context`, which is an object with the following properties and methods:
 
+- `next(state?: State): void` — a function that allows you to control when child nodes are visited, and which state they are visited with
 - `path: Node[]` — an array of parent nodes. For example, to get the root node you would do `path.at(0)`; to get the current node's immediate parent you would do `path.at(-1)`
 - `state: State` — an object of the same type as the second argument to `walk`. Visitors can pass new state objects to their children with `next(childState)` or `visit(node, childState)`
-- `next(state: State): void` — a function that allows you to control when child nodes are visited, and which state they are visited with. It can be called zero or one times — if zero, it will be called automatically once the current node has been visited
-- `skip(): void` — prevents children from being visited
 - `stop(): void` — prevents any subsequent traversal
 - `visit(node: Node, state?: State): Node` — returns the result of visiting `node` with the current set of visitors. If no `state` is provided, children will inherit the current state
 
