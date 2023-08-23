@@ -1,7 +1,7 @@
 {
 	"name": "zimmerframe",
 	"description": "A tool for walking ASTs",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"type": "module",
 	"exports": {
 		".": {
