@@ -2,6 +2,10 @@
 	"name": "zimmerframe",
 	"description": "A tool for walking ASTs",
 	"version": "0.2.1",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Rich-Harris/zimmerframe"
+	},
 	"type": "module",
 	"exports": {
 		".": {
