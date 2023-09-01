@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 1.0.0
+
+- Stable release
+
 ## 0.2.1
 
 - Push current node to path when calling `visit`
