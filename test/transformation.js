@@ -95,7 +95,7 @@ test('returns the result of child transforms when calling next', () => {
 	const transformed = /** @type {import('./types').TestNode} */ (
 		walk(/** @type {import('./types').TestNode} */ (tree), null, {
 			Root: (node, { next }) => {
-				const result = next();
+				const result = /** @type {import('./types').Root} */ (next());
 				children = result.children;
 				return node;
 			},
