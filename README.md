@@ -123,7 +123,7 @@ walk(node, state, visitors);
 
 Each visitor receives a second argument, `context`, which is an object with the following properties and methods:
 
-- `next(state?: State): void` — a function that allows you to control when child nodes are visited, and which state they are visited with
+- `next(state?: State): void` — a function that allows you to control when child nodes are visited, and which state they are visited with. If child visitors transform their inputs, this will return the transformed node (if not, returns `undefined`)
 - `path: Node[]` — an array of parent nodes. For example, to get the root node you would do `path.at(0)`; to get the current node's immediate parent you would do `path.at(-1)`
 - `state: State` — an object of the same type as the second argument to `walk`. Visitors can pass new state objects to their children with `next(childState)` or `visit(node, childState)`
 - `stop(): void` — prevents any subsequent traversal
