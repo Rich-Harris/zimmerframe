@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 1.1.0
+
+- Return transformed node from `context.next()` ([#17](https://github.com/Rich-Harris/zimmerframe/pull/17))
+
 ## 1.0.0
 
 - Stable release
