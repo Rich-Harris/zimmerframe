@@ -73,6 +73,10 @@ export function walk(node, state, visitors) {
 					}
 				}
 				path.pop();
+
+				if (Object.keys(mutations).length > 0) {
+					return { ...node, ...mutations };
+				}
 			},
 			stop: () => {
 				stopped = true;
@@ -103,6 +107,8 @@ export function walk(node, state, visitors) {
 						...context,
 						state: next_state
 					});
+
+					return inner_result;
 				}
 			});
 

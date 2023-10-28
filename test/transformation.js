@@ -81,3 +81,74 @@ test('respects individual visitors if universal visitor calls next()', () => {
 		children: [{ type: 'TransformedA' }, { type: 'B' }, { type: 'C' }]
 	});
 });
+
+test('returns the result of child transforms when calling next', () => {
+	/** @type {import('./types').TestNode} */
+	const tree = {
+		type: 'Root',
+		children: [{ type: 'A' }, { type: 'B' }, { type: 'C' }]
+	};
+
+	let count = 0;
+	let children;
+
+	const transformed = /** @type {import('./types').TestNode} */ (
+		walk(/** @type {import('./types').TestNode} */ (tree), null, {
+			Root: (node, { next }) => {
+				const result = /** @type {import('./types').Root} */ (next());
+				children = result.children;
+				return node;
+			},
+			A: (node) => {
+				count += 1;
+				return {
+					type: 'TransformedA'
+				};
+			},
+			C: (node) => {
+				count += 1;
+				return {
+					type: 'TransformedC'
+				};
+			}
+		})
+	);
+
+	expect(count).toBe(2);
+
+	// check that `tree` wasn't mutated
+	expect(tree).toEqual({
+		type: 'Root',
+		children: [{ type: 'A' }, { type: 'B' }, { type: 'C' }]
+	});
+
+	expect(transformed).toBe(tree);
+
+	expect(children).toEqual([
+		{ type: 'TransformedA' },
+		{ type: 'B' },
+		{ type: 'TransformedC' }
+	]);
+});
+
+test('returns undefined if there are no child transformations', () => {
+	/** @type {import('./types').TestNode} */
+	const tree = {
+		type: 'Root',
+		children: [{ type: 'A' }, { type: 'B' }, { type: 'C' }]
+	};
+
+	let result;
+
+	const transformed = /** @type {import('./types').TestNode} */ (
+		walk(/** @type {import('./types').TestNode} */ (tree), null, {
+			Root: (node, { next }) => {
+				result = next();
+			}
+		})
+	);
+
+	expect(transformed).toBe(tree);
+
+	expect(result).toBe(undefined);
+});
