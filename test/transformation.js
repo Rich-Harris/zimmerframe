@@ -152,3 +152,14 @@ test('returns undefined if there are no child transformations', () => {
 
 	expect(result).toBe(undefined);
 });
+
+test('doesnt mutate tree with non-type objects', () => {
+	const tree = {
+		type: 'Root',
+		children: [{ type: 'A', metadata: { foo: true } }, { type: 'B' }]
+	};
+
+	const transformed = walk(tree, null, {});
+
+	expect(transformed).toBe(tree);
+});
