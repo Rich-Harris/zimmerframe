@@ -1,10 +1,12 @@
 export interface Root {
 	type: 'Root';
 	children: TestNode[];
+	metadata?: any;
 }
 
 export interface A {
 	type: 'A';
+	metadata?: any;
 }
 
 export interface B {

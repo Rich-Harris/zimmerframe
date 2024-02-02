@@ -75,7 +75,7 @@ export function walk(node, state, visitors) {
 				path.pop();
 
 				if (Object.keys(mutations).length > 0) {
-					return { ...node, ...mutations };
+					return merge_objects(node, mutations);
 				}
 			},
 			stop: () => {
@@ -122,7 +122,7 @@ export function walk(node, state, visitors) {
 
 		if (!result) {
 			if (Object.keys(mutations).length > 0) {
-				result = { ...node, ...mutations };
+				result = merge_objects(node, mutations);
 			}
 		}
 
@@ -132,4 +132,23 @@ export function walk(node, state, visitors) {
 	}
 
 	return visit(node, [], state) ?? node;
+}
+
+/**
+ * @template {Record<string, any>} T
+ * @param {T} a
+ * @param {Record<string, any>} b
+ * @returns {T}
+ */
+function merge_objects(a, b) {
+	const obj = /** @type {T} */ ({});
+	for (const key of Reflect.ownKeys(a)) {
+		// @ts-expect-error use ownKeys to preserve non-enumerable keys
+		obj[key] = a[key];
+	}
+	// For new properties we assume that noone uses non-enumerable keys
+	for (const key in b) {
+		obj[/** @type {keyof T} */ (key)] = b[key];
+	}
+	return obj;
 }
