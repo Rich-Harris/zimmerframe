@@ -142,14 +142,19 @@ export function walk(node, state, visitors) {
  * @returns {T}
  */
 function merge_objects(a, b) {
-	const obj = /** @type {T} */ ({});
-	for (const key of Reflect.ownKeys(a)) {
-		// @ts-expect-error use ownKeys to preserve non-enumerable keys
-		obj[key] = a[key];
+	/** @type {Record<string, any>} */
+	const obj = {};
+
+	const descriptors = Object.getOwnPropertyDescriptors(a);
+
+	for (const key in descriptors) {
+		Object.defineProperty(obj, key, descriptors[key]);
 	}
+
 	// For new properties we assume that noone uses non-enumerable keys
 	for (const key in b) {
-		obj[/** @type {keyof T} */ (key)] = b[key];
+		obj[key] = b[key];
 	}
-	return obj;
+
+	return /** @type {T} */ (obj);
 }

@@ -165,6 +165,7 @@ test('keeps non-enumerable properties', () => {
 			{ type: 'B' }
 		]
 	};
+
 	Object.defineProperty(tree.children[0], 'metadata', {
 		value: { foo: true },
 		enumerable: false
@@ -182,12 +183,11 @@ test('keeps non-enumerable properties', () => {
 		}
 	);
 
-	expect(
-		/** @type {import('./types').Root} */ (transformed).children[0]
-	).toEqual({
-		type: 'Root',
-		metadata: { foo: true },
-		children: [{ type: 'TransformedA' }, { type: 'B' }]
+	// @ts-ignore
+	const { metadata } = transformed.children[0];
+
+	expect(metadata).toEqual({
+		foo: true
 	});
 });
 
