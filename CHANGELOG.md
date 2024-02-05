@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 1.1.2
+
+- Keep non-enumerable properties non-enumerable ([#20](https://github.com/Rich-Harris/zimmerframe/pull/20))
+
 ## 1.1.1
 
 - Prevent false positive mutations ([#18](https://github.com/Rich-Harris/zimmerframe/pull/18))
