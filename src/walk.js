@@ -76,7 +76,7 @@ export function walk(node, state, visitors) {
 				path.pop();
 
 				if (Object.keys(mutations).length > 0) {
-					return merge_objects(node, mutations);
+					return apply_mutations(node, mutations);
 				}
 			},
 			stop: () => {
@@ -123,7 +123,7 @@ export function walk(node, state, visitors) {
 
 		if (!result) {
 			if (Object.keys(mutations).length > 0) {
-				result = merge_objects(node, mutations);
+				result = apply_mutations(node, mutations);
 			}
 		}
 
@@ -137,19 +137,23 @@ export function walk(node, state, visitors) {
 
 /**
  * @template {Record<string, any>} T
- * @param {T} a
- * @param {Record<string, any>} b
+ * @param {T} node
+ * @param {Record<string, any>} mutations
  * @returns {T}
  */
-function merge_objects(a, b) {
-	const obj = /** @type {T} */ ({});
-	for (const key of Reflect.ownKeys(a)) {
-		// @ts-expect-error use ownKeys to preserve non-enumerable keys
-		obj[key] = a[key];
+function apply_mutations(node, mutations) {
+	/** @type {Record<string, any>} */
+	const obj = {};
+
+	const descriptors = Object.getOwnPropertyDescriptors(node);
+
+	for (const key in descriptors) {
+		Object.defineProperty(obj, key, descriptors[key]);
 	}
-	// For new properties we assume that noone uses non-enumerable keys
-	for (const key in b) {
-		obj[/** @type {keyof T} */ (key)] = b[key];
+
+	for (const key in mutations) {
+		obj[key] = mutations[key];
 	}
-	return obj;
+
+	return /** @type {T} */ (obj);
 }
