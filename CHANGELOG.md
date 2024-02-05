@@ -1,5 +1,10 @@
 # zimmerframe changelog
 
+## 1.1.1
+
+- Prevent false positive mutations ([#18](https://github.com/Rich-Harris/zimmerframe/pull/18))
+- Keep non-enumerable properties when cloning nodes ([#19](https://github.com/Rich-Harris/zimmerframe/pull/19))
+
 ## 1.1.0
 
 - Return transformed node from `context.next()` ([#17](https://github.com/Rich-Harris/zimmerframe/pull/17))
