@@ -153,6 +153,44 @@ test('returns undefined if there are no child transformations', () => {
 	expect(result).toBe(undefined);
 });
 
+test('keeps non-enumerable properties', () => {
+	/** @type {import('./types').TestNode} */
+	const tree = {
+		type: 'Root',
+		children: [
+			{
+				type: 'Root',
+				children: [{ type: 'A' }, { type: 'B' }]
+			},
+			{ type: 'B' }
+		]
+	};
+	Object.defineProperty(tree.children[0], 'metadata', {
+		value: { foo: true },
+		enumerable: false
+	});
+
+	const transformed = walk(
+		/** @type {import('./types').TestNode} */ (tree),
+		null,
+		{
+			A() {
+				return {
+					type: 'TransformedA'
+				};
+			}
+		}
+	);
+
+	expect(
+		/** @type {import('./types').Root} */ (transformed).children[0]
+	).toEqual({
+		type: 'Root',
+		metadata: { foo: true },
+		children: [{ type: 'TransformedA' }, { type: 'B' }]
+	});
+});
+
 test('doesnt mutate tree with non-type objects', () => {
 	const tree = {
 		type: 'Root',
