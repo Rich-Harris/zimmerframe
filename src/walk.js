@@ -22,8 +22,9 @@ export function walk(node, state, visitors) {
 	 * @returns {T | undefined}
 	 */
 	function visit(node, path, state) {
-		if (stopped) return node;
-		if (!node.type) return node;
+		// Don't return the node here or it could lead to false-positive mutation detection
+		if (stopped) return;
+		if (!node.type) return;
 
 		/** @type {T | void} */
 		let result;

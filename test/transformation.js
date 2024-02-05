@@ -190,3 +190,14 @@ test('keeps non-enumerable properties', () => {
 		children: [{ type: 'TransformedA' }, { type: 'B' }]
 	});
 });
+
+test('doesnt mutate tree with non-type objects', () => {
+	const tree = {
+		type: 'Root',
+		children: [{ type: 'A', metadata: { foo: true } }, { type: 'B' }]
+	};
+
+	const transformed = walk(tree, null, {});
+
+	expect(transformed).toBe(tree);
+});
