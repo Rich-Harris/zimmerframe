@@ -131,7 +131,7 @@ Each visitor receives a second argument, `context`, which is an object with the 
 
 ## Immutability
 
-ASTs are regarded as immutable. If you return a transformed node from a visitor, then all parents of the node will be replaced with clones, but unchanged subtrees will reuse the existing nodes.
+By default ASTs are regarded as immutable. If you return a transformed node from a visitor, then all parents of the node will be replaced with clones, but unchanged subtrees will reuse the existing nodes.
 
 For example in this case, no transformation takes place, meaning that the returned value is identical to the original AST:
 
@@ -174,6 +174,8 @@ transformed.left === original.left; // true, we can safely reuse this node
 ```
 
 This makes it very easy to transform parts of your AST without incurring the performance and memory overhead of cloning the entire thing, and without the footgun of mutating it in place.
+
+In case you _do_ want to mutate everything in place, pass `{ mutate: true }` as the fourth parameter to `walk`.
 
 ## License
 

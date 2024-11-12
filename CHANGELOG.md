@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 1.2.0
+
+- Allow AST to be mutated via new option ([#20](https://github.com/Rich-Harris/zimmerframe/pull/21))
+
 ## 1.1.2
 
 - Keep non-enumerable properties non-enumerable ([#20](https://github.com/Rich-Harris/zimmerframe/pull/20))
