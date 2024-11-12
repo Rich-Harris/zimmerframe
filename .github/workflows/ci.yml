@@ -19,15 +19,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - node-version: 16
+          - node-version: 20
             os: [ubuntu-latest]
-          - node-version: 16
+          - node-version: 20
             os: windows-latest
     steps:
       - run: git config --global core.autocrlf false
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2.2.2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
@@ -40,15 +40,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - node-version: 16
+          - node-version: 20
             os: [ubuntu-latest]
-          - node-version: 16
+          - node-version: 20
             os: windows-latest
     steps:
       - run: git config --global core.autocrlf false
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2.2.2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
