@@ -4,8 +4,10 @@
  * @param {T} node
  * @param {U} state
  * @param {import('./types').Visitors<T, U>} visitors
+ * @param {{ mutate?: boolean }} [options]
  */
-export function walk(node, state, visitors) {
+export function walk(node, state, visitors, options) {
+	const mutate = options?.mutate ?? false;
 	const universal = visitors._;
 
 	let stopped = false;
@@ -76,7 +78,11 @@ export function walk(node, state, visitors) {
 				path.pop();
 
 				if (Object.keys(mutations).length > 0) {
-					return apply_mutations(node, mutations);
+					if (mutate) {
+						mutate_node(node, mutations);
+					} else {
+						return apply_mutations(node, mutations);
+					}
 				}
 			},
 			stop: () => {
@@ -123,7 +129,11 @@ export function walk(node, state, visitors) {
 
 		if (!result) {
 			if (Object.keys(mutations).length > 0) {
-				result = apply_mutations(node, mutations);
+				if (mutate) {
+					mutate_node(node, mutations);
+				} else {
+					result = apply_mutations(node, mutations);
+				}
 			}
 		}
 
@@ -156,4 +166,14 @@ function apply_mutations(node, mutations) {
 	}
 
 	return /** @type {T} */ (obj);
+}
+
+/**
+ * @param {any} node
+ * @param {Record<string, any>} mutations
+ */
+function mutate_node(node, mutations) {
+	for (const key in mutations) {
+		node[key] = mutations[key];
+	}
 }

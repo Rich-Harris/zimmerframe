@@ -201,3 +201,29 @@ test('doesnt mutate tree with non-type objects', () => {
 
 	expect(transformed).toBe(tree);
 });
+
+test('mutates tree if mutate is true', () => {
+	const original_c = { type: 'C', x: true };
+	const tree = {
+		type: 'Root',
+		children: [{ type: 'A', children: [original_c] }, { type: 'B' }]
+	};
+
+	const transformed = walk(
+		tree,
+		null,
+		{
+			C(node) {
+				return { ...node, x: false };
+			}
+		},
+		{ mutate: true }
+	);
+
+	// @ts-expect-error
+	const c = transformed.children[0].children[0];
+
+	expect(transformed).toBe(tree);
+	expect(c.x).toBe(false);
+	expect(c).not.toBe(original_c);
+});
