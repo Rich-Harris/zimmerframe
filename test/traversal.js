@@ -159,7 +159,7 @@ test('path is pushed and popped correctly using next', () => {
 	 * @param {import('./types').TestNode | null} parent
 	 * @param {import('./types').TestNode[]} path
 	 */
-	function log_path(node, parent,path) {
+	function log_path(node, parent, path) {
 		log.push(`visited ${node.type}, ${parent?.type ?? null}, ${JSON.stringify(path.map((n) => n.type))}`);
 	}
 
@@ -178,7 +178,7 @@ test('path is pushed and popped correctly using next', () => {
 				log_path(node, parent, path);
 			},
 			C(node, { parent, path }) {
-				log_path(node, parent,  path);
+				log_path(node, parent, path);
 			}
 		}
 	);
