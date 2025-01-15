@@ -2,7 +2,7 @@
 
 ## 1.1.3
 
--  Add `context.parent`, equivalent to `context.path.at(-1)` ([#16]())
+-  Add `context.parent`, equivalent to `context.path.at(-1)` ([#23](https://github.com/Rich-Harris/zimmerframe/pull/23))
 
 ## 1.1.2
 
