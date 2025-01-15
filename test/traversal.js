@@ -156,38 +156,39 @@ test('path is pushed and popped correctly using next', () => {
 
 	/**
 	 * @param {import('./types').TestNode} node
+	 * @param {import('./types').TestNode | null} parent
 	 * @param {import('./types').TestNode[]} path
 	 */
-	function log_path(node, path) {
-		log.push(`visited ${node.type} ${JSON.stringify(path.map((n) => n.type))}`);
+	function log_path(node, parent,path) {
+		log.push(`visited ${node.type}, ${parent?.type ?? null}, ${JSON.stringify(path.map((n) => n.type))}`);
 	}
 
 	walk(
 		/** @type {import('./types').TestNode} */ (tree),
 		{},
 		{
-			Root(node, { path, next }) {
-				log_path(node, path);
+			Root(node, { path, parent, next }) {
+				log_path(node, parent, path);
 				next();
 			},
-			A(node, { path }) {
-				log_path(node, path);
+			A(node, { parent, path }) {
+				log_path(node, parent, path);
 			},
-			B(node, { path }) {
-				log_path(node, path);
+			B(node, { parent, path }) {
+				log_path(node, parent, path);
 			},
-			C(node, { path }) {
-				log_path(node, path);
+			C(node, { parent, path }) {
+				log_path(node, parent,  path);
 			}
 		}
 	);
 
 	expect(log).toEqual([
-		'visited Root []',
-		'visited Root ["Root"]',
-		'visited A ["Root","Root"]',
-		'visited B ["Root"]',
-		'visited C ["Root"]'
+		'visited Root, null, []',
+		'visited Root, Root, ["Root"]',
+		'visited A, Root, ["Root","Root"]',
+		'visited B, Root, ["Root"]',
+		'visited C, Root, ["Root"]'
 	]);
 });
 
@@ -207,18 +208,19 @@ test('path is pushed and popped correctly using visit', () => {
 
 	/**
 	 * @param {import('./types').TestNode} node
+	 * @param {import('./types').TestNode | null} parent
 	 * @param {import('./types').TestNode[]} path
 	 */
-	function log_path(node, path) {
-		log.push(`visited ${node.type} ${JSON.stringify(path.map((n) => n.type))}`);
+	function log_path(node, parent, path) {
+		log.push(`visited ${node.type}, ${parent?.type ?? null}, ${JSON.stringify(path.map((n) => n.type))}`);
 	}
 
 	walk(
 		/** @type {import('./types').TestNode} */ (tree),
 		{},
 		{
-			Root(node, { path, visit }) {
-				log_path(node, path);
+			Root(node, { path, parent, visit }) {
+				log_path(node, parent, path);
 
 				for (const child of node.children) {
 					if (child.type !== 'C') {
@@ -226,22 +228,22 @@ test('path is pushed and popped correctly using visit', () => {
 					}
 				}
 			},
-			A(node, { path }) {
-				log_path(node, path);
+			A(node, { parent, path }) {
+				log_path(node, parent, path);
 			},
-			B(node, { path }) {
-				log_path(node, path);
+			B(node, { parent, path }) {
+				log_path(node, parent, path);
 			},
-			C(node, { path }) {
-				log_path(node, path);
+			C(node, { parent, path }) {
+				log_path(node, parent, path);
 			}
 		}
 	);
 
 	expect(log).toEqual([
-		'visited Root []',
-		'visited Root ["Root"]',
-		'visited A ["Root","Root"]',
-		'visited B ["Root"]'
+		'visited Root, null, []',
+		'visited Root, Root, ["Root"]',
+		'visited A, Root, ["Root","Root"]',
+		'visited B, Root, ["Root"]'
 	]);
 });

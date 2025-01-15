@@ -1,5 +1,9 @@
 # zimmerframe changelog
 
+## 1.1.3
+
+-  Add `context.parent`, equivalent to `context.path.at(-1)` ([#16]())
+
 ## 1.1.2
 
 - Keep non-enumerable properties non-enumerable ([#20](https://github.com/Rich-Harris/zimmerframe/pull/20))
