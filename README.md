@@ -155,7 +155,7 @@ const original = {
     type: 'Identifier',
     name: 'foo'
   },
-  left: {
+  right: {
     type: 'Identifier',
     name: 'bar'
   }
