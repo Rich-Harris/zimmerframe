@@ -15,6 +15,7 @@ export type Visitors<T extends BaseNode, U> = T['type'] extends '_'
 export interface Context<T, U> {
 	next: (state?: U) => T | void;
 	path: T[];
+	parent: T | null;
 	state: U;
 	stop: () => void;
 	visit: (node: T, state?: U) => T;
